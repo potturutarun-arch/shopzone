@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./ecommerce.db")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SQLALCHEMY_DATABASE_URL = os.environ.get("DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'ecommerce.db')}")
 
 # Render/Supabase use postgresql:// but SQLAlchemy requires postgresql+psycopg2:// or postgresql:// depending on driver
 if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
