@@ -14,7 +14,7 @@ services:
     name: shopzone-frontend
     runtime: static
     buildCommand: npm install && npm run build
-    publishPath: dist
+    staticPublishPath: dist
     envVars:
       - key: VITE_API_BASE_URL
         value: "https://shopzone-backend.onrender.com"
