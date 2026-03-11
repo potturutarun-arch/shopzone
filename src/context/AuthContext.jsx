@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
 const AuthContext = createContext();
 
@@ -33,7 +34,7 @@ export const AuthProvider = ({ children }) => {
   // Real API signup
   const signup = async (name, email, password) => {
     try {
-      const resp = await fetch('/api/auth/signup', {
+      const resp = await fetch(`${API_BASE}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
@@ -55,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   // Real API login
   const login = async (email, password) => {
     try {
-      const resp = await fetch('/api/auth/login', {
+      const resp = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ identifier: email, password })
@@ -101,7 +102,7 @@ export const AuthProvider = ({ children }) => {
     };
     
     try {
-      const resp = await fetch(`/api/orders?user_id=${currentUser.id}`, {
+      const resp = await fetch(`${API_BASE}/api/orders?user_id=${currentUser.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +143,7 @@ export const AuthProvider = ({ children }) => {
     if (!currentUser || !currentUser.id) return;
 
     try {
-      const resp = await fetch(`/api/orders/${orderId}/cancel?user_id=${currentUser.id}`, {
+      const resp = await fetch(`${API_BASE}/api/orders/${orderId}/cancel?user_id=${currentUser.id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -214,7 +215,7 @@ export const AuthProvider = ({ children }) => {
   // Real OTP sending
   const sendOtp = async (identifier) => {
     try {
-      const resp = await fetch(`/api/auth/send-otp?identifier=${encodeURIComponent(identifier)}`, {
+      const resp = await fetch(`${API_BASE}/api/auth/send-otp?identifier=${encodeURIComponent(identifier)}`, {
         method: 'POST'
       });
       const data = await resp.json();
@@ -228,7 +229,7 @@ export const AuthProvider = ({ children }) => {
   // Real OTP verification
   const verifyOtp = async (identifier, otp) => {
     try {
-      const resp = await fetch('/api/auth/login', {
+      const resp = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ identifier, otp })
@@ -248,7 +249,7 @@ export const AuthProvider = ({ children }) => {
   const claimGiftCard = async (code) => {
     if (!currentUser) return Promise.reject('Please login first');
     try {
-      const resp = await fetch(`/api/wallet/claim-gift-card?user_id=${currentUser.id}`, {
+      const resp = await fetch(`${API_BASE}/api/wallet/claim-gift-card?user_id=${currentUser.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ code })
@@ -271,7 +272,7 @@ export const AuthProvider = ({ children }) => {
   const transferUpi = async (upiId, amount) => {
     if (!currentUser) return Promise.reject('Please login first');
     try {
-      const resp = await fetch(`/api/wallet/transfer-upi?user_id=${currentUser.id}`, {
+      const resp = await fetch(`${API_BASE}/api/wallet/transfer-upi?user_id=${currentUser.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ upi_id: upiId, amount: Number(amount) })

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Activity, Users, ShoppingBag, DollarSign, ShieldAlert, ArrowLeft } from 'lucide-react';
@@ -25,19 +26,19 @@ const AdminDashboard = () => {
         const userId = currentUser ? currentUser.id : 1; // Fallback to user 1 for demo
         
         // Fetch stats
-        const statsRes = await fetch(`/api/admin/stats?user_id=${userId}`);
+        const statsRes = await fetch(`${API_BASE}/api/admin/stats?user_id=${userId}`);
         if (!statsRes.ok) throw new Error('Failed to fetch stats');
         const statsData = await statsRes.json();
         setStats(statsData);
 
         // Fetch users
-        const usersRes = await fetch(`/api/admin/users?user_id=${userId}`);
+        const usersRes = await fetch(`${API_BASE}/api/admin/users?user_id=${userId}`);
         if (!usersRes.ok) throw new Error('Failed to fetch users');
         const usersData = await usersRes.json();
         setUsers(usersData);
         
         // Fetch orders
-        const ordersRes = await fetch(`/api/admin/orders?user_id=${userId}`);
+        const ordersRes = await fetch(`${API_BASE}/api/admin/orders?user_id=${userId}`);
         if (!ordersRes.ok) throw new Error('Failed to fetch orders');
         const ordersData = await ordersRes.json();
         setOrders(ordersData);
@@ -58,7 +59,7 @@ const AdminDashboard = () => {
     
     try {
       const userId = currentUser ? currentUser.id : 1;
-      const resp = await fetch(`/api/admin/products?user_id=${userId}`, {
+      const resp = await fetch(`${API_BASE}/api/admin/products?user_id=${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +80,7 @@ const AdminDashboard = () => {
       setProductForm({ name: '', category: 'Mobiles', price: '', old_price: '', img: '', rating: '4.5', reviews: '100', in_stock: true, description: '' });
       
       // Refresh stats
-      const statsRes = await fetch(`/api/admin/stats?user_id=${userId}`);
+      const statsRes = await fetch(`${API_BASE}/api/admin/stats?user_id=${userId}`);
       if (statsRes.ok) setStats(await statsRes.json());
       
     } catch (err) {
