@@ -12,7 +12,8 @@ services:
         value: 3.11.0
 
   # Frontend React Static Site
-  - type: static
+  - type: web
+      runtime: static
     name: shopzone-frontend
     buildCommand: npm install && npm run build
     publishPath: dist
