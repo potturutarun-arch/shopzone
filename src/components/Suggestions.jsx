@@ -3,15 +3,18 @@ import { useHistory } from '../hooks/useHistory';
 import { useCart } from '../context/CartContext';
 import { Sparkles, ShoppingCart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { ProductDB } from '../data/mockDataGenerator';
+import { useProducts } from '../context/ProductContext';
 
 const Suggestions = () => {
   const { history, viewProduct } = useHistory();
   const { addToCart } = useCart();
+  const { products, loading } = useProducts();
   const [recommendations, setRecommendations] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!products || products.length === 0) return;
+
     // Recommendation logic based on most viewed category
     const categoriesClicked = history.map(item => item.category);
     
@@ -22,17 +25,19 @@ const Suggestions = () => {
       ).pop();
     }
 
-    let recs = ProductDB.filter(p => p.category === favoriteCategory);
+    let recs = products.filter(p => p.category === favoriteCategory);
     
     // If no history or not enough from category, mix
     if (recs.length < 4) {
-      recs = [...recs, ...ProductDB.filter(p => p.category !== favoriteCategory)].slice(0, 6);
+      recs = [...recs, ...products.filter(p => p.category !== favoriteCategory)].slice(0, 6);
     } else {
       recs = recs.slice(0, 6); // Limit to 6
     }
 
     setRecommendations(recs);
-  }, [history]);
+  }, [history, products]);
+
+  if (loading) return null;
 
   const handleProductClick = (product) => {
     viewProduct(product);

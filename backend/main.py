@@ -145,6 +145,47 @@ def transfer_upi(user_id: int, transfer: schemas.UPITransfer, db: Session = Depe
     
     return db_user
 
+# --- Product Endpoints ---
+@app.get("/api/products", response_model=list[schemas.ProductResponse])
+def get_products(category: str = None, db: Session = Depends(get_db)):
+    if category:
+        return db.query(models.Product).filter(models.Product.category.ilike(category)).all()
+    return db.query(models.Product).all()
+
+@app.get("/api/products/{product_id}", response_model=schemas.ProductResponse)
+def get_product(product_id: int, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
+
+@app.post("/api/products/seed")
+def seed_products(db: Session = Depends(get_db)):
+    # Simple automatic seed for the user
+    count = db.query(models.Product).count()
+    if count > 0:
+        return {"message": "Products already seeded"}
+        
+    mock_products = [
+        {"name": "Cotton Graphic T-Shirt", "category": "Fashion", "price": 499, "img": "https://images.unsplash.com/photo-1596755094514-f87e32f85e23?w=500&q=80", "rating": 4.5, "reviews": 120, "description": "Comfortable daily wear.", "in_stock": True},
+        {"name": "Slim Fit Denim Jeans", "category": "Fashion", "price": 1299, "old_price": 1999, "img": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&q=80", "rating": 4.2, "reviews": 85, "description": "Classic blue slim fit.", "in_stock": True},
+        {"name": "Wireless Noise-Canceling Headphones", "category": "Electronics", "price": 2999, "old_price": 4999, "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80", "rating": 4.8, "reviews": 450, "description": "Deep bass and isolation.", "in_stock": True},
+        {"name": "Smartphone 5G Pro", "category": "Mobiles", "price": 45999, "old_price": 52999, "img": "https://images.unsplash.com/photo-1598327105666-5b89351cb31b?w=500&q=80", "rating": 4.6, "reviews": 890, "description": "Latest 5G flagship.", "in_stock": True},
+        {"name": "Ceramic Flower Vase", "category": "Home", "price": 399, "img": "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=500&q=80", "rating": 4.1, "reviews": 45, "description": "Elegant table decor.", "in_stock": True},
+        {"name": "Plush Teddy Bear", "category": "Toys & Baby", "price": 599, "img": "https://images.unsplash.com/photo-1559454403-b8fb88521f11?w=500&q=80", "rating": 4.9, "reviews": 210, "description": "Soft and cuddly.", "in_stock": True},
+        {"name": "Organic Almonds 500g", "category": "Food", "price": 650, "old_price": 800, "img": "https://images.unsplash.com/photo-1599598425947-33002629eeaf?w=500&q=80", "rating": 4.7, "reviews": 320, "description": "Premium raw almonds.", "in_stock": True},
+        {"name": "Matte Lipstick Set", "category": "Beauty", "price": 899, "img": "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=500&q=80", "rating": 4.4, "reviews": 150, "description": "Long-lasting colors.", "in_stock": True},
+        {"name": "Digital Air Fryer", "category": "Appliances", "price": 4500, "old_price": 6000, "img": "https://images.unsplash.com/photo-1626200419188-37f00d8c105b?w=500&q=80", "rating": 4.8, "reviews": 560, "description": "Healthy oil-free cooking.", "in_stock": True},
+        {"name": "Yoga Mat", "category": "Sports", "price": 499, "img": "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500&q=80", "rating": 4.3, "reviews": 90, "description": "Non-slip exercise mat.", "in_stock": True}
+    ]
+    
+    for p in mock_products:
+        db_product = models.Product(**p)
+        db.add(db_product)
+        
+    db.commit()
+    return {"message": "Success"}
+
 # --- Order Endpoints ---
 @app.post("/api/orders", response_model=schemas.MessageResponse)
 def create_order(user_id: int, order: schemas.OrderCreate, db: Session = Depends(get_db)):

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 const AuthContext = createContext();
 
@@ -75,6 +75,31 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Mock a login process via Phone Number for backward compatibility (in case anyone uses it directly)
+  const loginWithPhone = (phone) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (!phone || phone.length < 10) {
+          reject('Please enter a valid 10-digit mobile number.');
+          return;
+        }
+        
+        // Mock a user that logs in via phone
+        const previousUser = { ...currentUser };
+        const user = { 
+          name: `User_${phone.substring(5)}`, 
+          email: previousUser?.email || '', 
+          phone: phone, 
+          avatar: previousUser?.avatar || '', 
+          orders: previousUser?.orders || [], 
+          addresses: previousUser?.addresses || [] 
+        };
+        setCurrentUser(user);
+        resolve({ success: true, user });
+      }, 1500); 
+    });
+  };
+
   const logout = () => {
     setCurrentUser(null);
     setToken(null);
@@ -83,7 +108,6 @@ export const AuthProvider = ({ children }) => {
   const addOrder = async (orderData, paymentMethod = "Razorpay", paymentId = null, paymentStatus = "Paid") => {
     if (!currentUser) return;
     
-    // Safety check: if an old localStorage bug left currentUser.id undefined, reject the order early
     if (!currentUser.id) {
         throw new Error("Local session corrupted. Please logout and login again.");
     }
@@ -235,7 +259,10 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ identifier, otp })
       });
       const data = await resp.json();
-      if (!resp.ok) throw new Error(data.detail || 'Invalid OTP');
+      if (!resp.ok) {
+        const errorMsg = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
+        throw new Error(errorMsg || 'Invalid OTP');
+      }
       
       setCurrentUser(data.user);
       setToken(data.token);
@@ -257,7 +284,6 @@ export const AuthProvider = ({ children }) => {
       const data = await resp.json();
       if (!resp.ok) throw new Error(data.detail || 'Failed to claim gift card');
       
-      // Calculate how much was added by subtracting new balance
       const newBalance = data.pay_zone_balance;
       const amountAdded = newBalance - (currentUser.payZoneBalance || 0);
       
@@ -293,6 +319,7 @@ export const AuthProvider = ({ children }) => {
       isLoggedIn: !!currentUser,
       signup,
       login,
+      loginWithPhone,
       logout,
       sendOtp,
       verifyOtp,

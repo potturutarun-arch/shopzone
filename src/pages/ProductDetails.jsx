@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ProductDB } from '../data/mockDataGenerator';
+import { useProducts } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
 import { ShoppingCart, Star, ShieldCheck, ArrowLeft, Zap } from 'lucide-react';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const { products, loading } = useProducts();
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
@@ -17,10 +18,13 @@ const ProductDetails = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Find the product in our mock DB (which is just an in-memory array)
-    const found = ProductDB.find(p => p.id === parseInt(id));
-    setProduct(found);
-  }, [id]);
+    if (products && products.length > 0) {
+      const found = products.find(p => p.id === parseInt(id));
+      setProduct(found);
+    }
+  }, [id, products]);
+
+  if (loading) return null;
 
   if (!product) {
     return (

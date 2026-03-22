@@ -3,7 +3,7 @@ import { Clock } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useHistory } from '../hooks/useHistory';
 import { useNavigate } from 'react-router-dom';
-import { ProductDB } from '../data/mockDataGenerator';
+import { useProducts } from '../context/ProductContext';
 
 const DealsCountdown = () => {
   const [timeLeft, setTimeLeft] = useState(12 * 60 * 60); // 12 hours
@@ -11,15 +11,18 @@ const DealsCountdown = () => {
   const { viewProduct } = useHistory();
   const navigate = useNavigate();
 
-  // Pick 4 random discounted items from DB
-  const [deals] = useState(() => {
-    const discounted = ProductDB.filter(p => p.oldPrice);
-    return discounted.slice(0, 4).map(item => {
-      // Calculate abstract discount % rounded
-      const discountPercent = Math.round((1 - (item.price / item.oldPrice)) * 100);
-      return {...item, discountPercent: `${discountPercent}%`};
-    });
-  });
+  const { products, loading } = useProducts();
+  const [deals, setDeals] = useState([]);
+
+  useEffect(() => {
+    if (products && products.length > 0) {
+      const discounted = products.filter(p => p.oldPrice);
+      setDeals(discounted.slice(0, 4).map(item => {
+        const discountPercent = Math.round((1 - (item.price / item.oldPrice)) * 100);
+        return {...item, discountPercent: `${discountPercent}%`};
+      }));
+    }
+  }, [products]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -63,6 +66,8 @@ const DealsCountdown = () => {
     e.stopPropagation();
     if(!isExpired) addToCart(product);
   };
+
+  if (loading) return null;
 
   return (
     <div className="content-section deals-container" style={{ opacity: isExpired ? 0.5 : 1, pointerEvents: isExpired ? 'none' : 'auto' }}>

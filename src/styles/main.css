@@ -743,3 +743,10 @@ body {
 }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Utilities for Premium Layouts */
+@media (min-width: 768px) {
+  .desktop-flex {
+    display: flex !important;
+  }
+}

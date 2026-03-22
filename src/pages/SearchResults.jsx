@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { ProductDB } from '../data/mockDataGenerator';
+import { useProducts } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
 import { ShoppingCart } from 'lucide-react';
 import { useHistory } from '../hooks/useHistory';
@@ -10,6 +10,7 @@ const SearchResults = () => {
   const query = searchParams.get('q') || '';
   const categoryQuery = searchParams.get('category') || '';
   const [results, setResults] = useState([]);
+  const { products, loading } = useProducts();
   const { addToCart } = useCart();
   const { viewProduct } = useHistory();
   const navigate = useNavigate();
@@ -18,27 +19,31 @@ const SearchResults = () => {
     window.scrollTo(0, 0);
     const lowerQuery = query.toLowerCase().trim();
     
+    if (loading || !products || products.length === 0) return;
+
     if (categoryQuery) {
       // Exact category match
-      const filtered = ProductDB.filter(product => product.category === categoryQuery);
+      const filtered = products.filter(product => product.category === categoryQuery);
       setResults(filtered);
       return;
     }
     
     if (!lowerQuery) {
-      setResults(ProductDB);
+      setResults(products);
       return;
     }
 
-    // Filter massive DB for query in name, category, or description
-    const filtered = ProductDB.filter(product => 
+    // Filter DB for query in name, category, or description
+    const filtered = products.filter(product => 
       product.name.toLowerCase().includes(lowerQuery) ||
       product.category.toLowerCase().includes(lowerQuery) ||
       product.description.toLowerCase().includes(lowerQuery)
     );
     
     setResults(filtered);
-  }, [query, categoryQuery]);
+  }, [query, categoryQuery, products, loading]);
+
+  if (loading) return null;
 
   const handleProductClick = (product) => {
     viewProduct(product);
