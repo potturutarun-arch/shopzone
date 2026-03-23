@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import uuid
+from typing import List
 
 import models, schemas, database
 from database import engine
@@ -146,7 +147,7 @@ def transfer_upi(user_id: int, transfer: schemas.UPITransfer, db: Session = Depe
     return db_user
 
 # --- Product Endpoints ---
-@app.get("/api/products", response_model=list[schemas.ProductResponse])
+@app.get("/api/products", response_model=List[schemas.ProductResponse])
 def get_products(category: str = None, db: Session = Depends(get_db)):
     if category:
         return db.query(models.Product).filter(models.Product.category.ilike(category)).all()
@@ -240,7 +241,7 @@ def cancel_order(order_id: str, user_id: int, db: Session = Depends(get_db)):
 
 
 # --- Admin Endpoints ---
-@app.get("/api/admin/users", response_model=list[schemas.UserResponse])
+@app.get("/api/admin/users", response_model=List[schemas.UserResponse])
 def get_all_users(user_id: int, db: Session = Depends(get_db)):
     # Bypassed for demo
     # db_user = db.query(models.User).filter(models.User.id == user_id).first()
