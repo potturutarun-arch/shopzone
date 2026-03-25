@@ -99,7 +99,56 @@ const randomInRange = (min, max) => Math.floor(Math.random() * (max - min + 1)) 
 const randomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 export const generateDatabase = () => {
-  const database = [];
+  const database = [
+    {
+      id: "PROD_901",
+      name: "Apple iPhone 15 Pro Max (Titanium)",
+      category: "Mobiles",
+      price: 154999,
+      oldPrice: 159999,
+      img: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=500",
+      rating: 4.9,
+      reviews: 5430,
+      in_stock: true,
+      description: "Forged in titanium and featuring the groundbreaking A17 Pro chip."
+    },
+    {
+      id: "PROD_902",
+      name: "Sony WH-1000XM5 Noise Cancelling",
+      category: "Electronics",
+      price: 29990,
+      oldPrice: 34990,
+      img: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&q=80&w=500",
+      rating: 4.8,
+      reviews: 2150,
+      in_stock: true,
+      description: "Industry leading noise cancellation with two processors controlling 8 microphones."
+    },
+    {
+      id: "PROD_903",
+      name: "Nike Air Max 270 React",
+      category: "Fashion",
+      price: 12995,
+      oldPrice: 14995,
+      img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=500",
+      rating: 4.7,
+      reviews: 940,
+      in_stock: true,
+      description: "Nike's first lifestyle Air Max brings you style, comfort and big attitude."
+    },
+    {
+      id: "PROD_904",
+      name: "Dyson V15 Detect Vacuum",
+      category: "Appliances",
+      price: 64900,
+      oldPrice: 69900,
+      img: "https://images.unsplash.com/photo-1558317374-067fb5f300cb?auto=format&fit=crop&q=80&w=500",
+      rating: 4.9,
+      reviews: 1120,
+      in_stock: true,
+      description: "The most powerful, intelligent cordless vacuum with laser illumination."
+    }
+  ];
   let idCounter = 1000;
 
   for (let i = 0; i < 2000; i++) {
