@@ -147,6 +147,50 @@ export const generateDatabase = () => {
       reviews: 1120,
       in_stock: true,
       description: "The most powerful, intelligent cordless vacuum with laser illumination."
+    },
+    // Mobiles
+    {
+      id: "PROD_905", name: "Samsung Galaxy S24 Ultra", category: "Mobiles",
+      price: 129999, oldPrice: 134999, img: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&q=80&w=500", rating: 4.8, reviews: 3420, in_stock: true, description: "Galaxy AI is here. Welcome to the era of mobile AI."
+    },
+    {
+      id: "PROD_906", name: "Google Pixel 8 Pro", category: "Mobiles",
+      price: 106999, oldPrice: 109999, img: "https://images.unsplash.com/photo-1598327105666-5b89351cb31b?auto=format&fit=crop&q=80&w=500", rating: 4.7, reviews: 1845, in_stock: true, description: "The all-pro Google phone with Google AI."
+    },
+    {
+      id: "PROD_907", name: "OnePlus 12 5G", category: "Mobiles",
+      price: 64999, oldPrice: 69999, img: "https://images.unsplash.com/photo-1533228100845-08145b01de11?auto=format&fit=crop&q=80&w=500", rating: 4.6, reviews: 2950, in_stock: true, description: "Smooth Beyond Belief. Snapdragon 8 Gen 3."
+    },
+    // Fashion
+    {
+      id: "PROD_908", name: "Levi's 511 Slim Fit Jeans", category: "Fashion",
+      price: 2999, oldPrice: 3499, img: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=500", rating: 4.5, reviews: 8560, in_stock: true, description: "A modern slim with room to move, the 511 Slim Fit Jeans are a classic since right now."
+    },
+    {
+      id: "PROD_909", name: "Ray-Ban Aviator Classic", category: "Fashion",
+      price: 8490, oldPrice: 9990, img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=500", rating: 4.8, reviews: 12050, in_stock: true, description: "Currently one of the most iconic sunglass models in the world."
+    },
+    {
+      id: "PROD_910", name: "Zara Classic Trench Coat", category: "Fashion",
+      price: 6990, oldPrice: 8990, img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=500", rating: 4.7, reviews: 630, in_stock: true, description: "Water-repellent trench coat with a lapel collar and long sleeves."
+    },
+    // Appliances
+    {
+      id: "PROD_911", name: "LG 8kg Front Load Washing Machine", category: "Appliances",
+      price: 34990, oldPrice: 42990, img: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&q=80&w=500", rating: 4.6, reviews: 4120, in_stock: true, description: "AI Direct Drive with Steam for absolute fabric care."
+    },
+    {
+      id: "PROD_912", name: "Samsung 253L Smart Refrigerator", category: "Appliances",
+      price: 24990, oldPrice: 31990, img: "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&q=80&w=500", rating: 4.5, reviews: 3100, in_stock: true, description: "Digital Inverter Technology for long-lasting performance."
+    },
+    {
+      id: "PROD_913", name: "Philips Airfryer XXL", category: "Appliances",
+      price: 14999, oldPrice: 18999, img: "https://images.unsplash.com/photo-1626200419188-37f00d8c105b?auto=format&fit=crop&q=80&w=500", rating: 4.8, reviews: 2780, in_stock: true, description: "Maximum taste, minimum fat. Effortlessly. Includes Smart Sensing Technology."
+    },
+    // Electronics
+    {
+      id: "PROD_914", name: "Apple MacBook Pro M3 14-inch", category: "Electronics",
+      price: 169900, oldPrice: 174900, img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=500", rating: 4.9, reviews: 890, in_stock: true, description: "Mind-blowing. Head-turning. The most advanced chips ever built for a personal computer."
     }
   ];
   let idCounter = 1000;
