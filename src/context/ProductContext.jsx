@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { generateDatabase } from '../data/mockDataGenerator';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -31,10 +32,14 @@ export const ProductProvider = ({ children }) => {
           inStock: p.in_stock
         }));
         
-        setProducts(formattedData);
+        if (formattedData.length === 0) {
+            setProducts(generateDatabase()); // Fallback
+        } else {
+            setProducts(formattedData);
+        }
       } catch (err) {
-        setError(err.message);
-        console.error("Error fetching products:", err);
+        console.warn("Backend offline or empty, falling back to mock database directly...");
+        setProducts(generateDatabase());
       } finally {
         setLoading(false);
       }
